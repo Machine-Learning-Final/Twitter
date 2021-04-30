@@ -28,6 +28,69 @@ Useful Data Features
 
 Data Sources
 	The data comes directly from Twitter, using a developers code and log in keys we were able to download tweets that included the hashtag “pizza” and was the most recent up to 10,000 tweets.
+	
+
+Machine Learning Algorithms
+
+NGrams
+We applied Ngrams to our dataset. Ngrams are just word combinations, meaning words that appear together sequentially, so you can have a bigram which is two words, or trigram which is 3 words and so on. This step just added some additional diversity into our corpus and also helps us to identify sets of words in our topic that appear together. We used bigrams and trigrams.
+
+ <img width="393" alt="Screen Shot 2021-04-30 at 2 49 00 PM" src="https://user-images.githubusercontent.com/80725922/116747244-394d0d80-a9c3-11eb-8584-ffb4d317f3cc.png">
+
+
+Count Vectorizer
+We then applied the spark count vectorizer model to our dataframe which converts the collection of documents (tweets) to vectors of token counts. During the fitting process, CountVectorizer selects to the top vocabsize words ordered by term frequency across the corpus and the result is a sparse vector. In order to make the machine learning model work, we needed to convert the sparse vector to a dense vector as that is the format that our model takes.
+
+
+LDA (Latent Dirichlet Allocation)
+We had originally planned to use K-means to find clusters of words that we would make recommendations on for our use case, but we ran into an issue because Spark does not have multidimensional scaling which we needed in order to effectively apply K-means to our dataset. So we researched alternatives and chose latent dirichlet allocation. LDA is also an unspervised clustering algorithm that models documents and topics based on Dirichlet distribution. It iteratively searches a set of documents, in our case tweets, to identify topics that best describe the set of documents. So with that, we are able to identify topics we can use to make marketing campaigns around based on tweets.
+When we apply the LDA model, we get a set of topics and associated words with a number that indicates the weight of that word or ngram for that topic. 
+Within this model, we can set k as however many topics we would like the LDA model to describe and as many words as we would like to include. After exploring multiple combinations of k topics and n number of words, we finally set k topics to 3 and chose to show the top 10 words or ngrams associated with that topic.
+
+<img width="207" alt="Screen Shot 2021-04-30 at 2 55 06 PM" src="https://user-images.githubusercontent.com/80725922/116747788-10794800-a9c4-11eb-9426-655494233ef4.png">
+
+
+
+Recommendations
+
+From the 3 topics that we chose, we identified the key words that would help us make business recommendations. The themes were:
+1. Pineapple pizza
+2. Make pizza
+3. Food with friends
+And a common theme between all of these was order/time/call
+
+Therefore, we made the following business recommendations:
+
+PRODUCT DEVELOPMENT
+Perform cross selling with pineapple pizza as the base
+Include a DIY pizza kit as part of the new product offerings
+
+MARKETING
+Campaign featuring a pineapple pizza combo
+Campaign with friends or couples making pizza from the kit
+
+CUSTOMER EXPERIENCE
+Improve delivery experience by making it faster and seamless
+
+
+Shortcomings & Improvements
+
+SHORTCOMINGS
+Non-English words and non-words
+Similarities between words in topics
+No events found
+Pivoted due to lack of native multidimensional scaling in Spark\
+
+IMPROVEMENTS
+Use another Tweet extraction method
+Filter only English language
+Add hashtags that would include events
+Sample a more comprehensive time frame
+Include location information
+Remove "pizza" as a stop-word
+
+ 
+ 
 
 
 [Twitter Content Analysis.docx](https://github.com/Machine-Learning-Final/Twitter/files/6193175/Twitter.Content.Analysis.docx)
